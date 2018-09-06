@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180906163556) do
+ActiveRecord::Schema.define(version: 20180906173823) do
 
   create_table "AclRecord", primary_key: "Id", id: :integer, force: :cascade do |t|
     t.integer "EntityId", null: false
@@ -1147,3 +1147,246 @@ ActiveRecord::Schema.define(version: 20180906163556) do
     t.integer "DisplayOrder", null: false
   end
 
+  create_table "Store", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.string "Name", limit: 400, null: false
+    t.string "Url", limit: 400, null: false
+    t.boolean "SslEnabled", null: false
+    t.string "SecureUrl", limit: 400
+    t.string "Hosts", limit: 1000
+    t.integer "DisplayOrder", null: false
+    t.string "CompanyName", limit: 1000
+    t.string "CompanyAddress", limit: 1000
+    t.string "CompanyPhoneNumber", limit: 1000
+    t.string "CompanyVat", limit: 1000
+    t.integer "DefaultLanguageId", null: false
+  end
+
+  create_table "StoreMapping", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.integer "EntityId", null: false
+    t.string "EntityName", limit: 400, null: false
+    t.integer "StoreId", null: false
+    t.index ["EntityId", "EntityName"], name: "IX_StoreMapping_EntityId_EntityName"
+  end
+
+  create_table "TaxCategory", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.string "Name", limit: 400, null: false
+    t.integer "DisplayOrder", null: false
+  end
+
+  create_table "TaxRate", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.integer "TaxCategoryId", null: false
+    t.integer "CountryId", null: false
+    t.integer "StateProvinceId", null: false
+    t.text "Zip"
+    t.decimal "Percentage", precision: 18, scale: 4, null: false
+    t.integer "StoreId", null: false
+  end
+
+  create_table "TierPrice", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.integer "CustomerRoleId"
+    t.integer "Quantity", null: false
+    t.decimal "Price", precision: 18, scale: 4, null: false
+    t.integer "StoreId", null: false
+    t.integer "ProductId", null: false
+  end
+
+  create_table "Topic", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.text "SystemName"
+    t.boolean "IncludeInSitemap", null: false
+    t.boolean "IsPasswordProtected", null: false
+    t.text "Password"
+    t.text "Title"
+    t.text "Body"
+    t.text "MetaKeywords"
+    t.text "MetaDescription"
+    t.text "MetaTitle"
+    t.boolean "LimitedToStores", null: false
+    t.boolean "IncludeInTopMenu", null: false
+    t.integer "TopicTemplateId", null: false
+    t.boolean "IncludeInFooterColumn1", null: false
+    t.boolean "IncludeInFooterColumn2", null: false
+    t.boolean "IncludeInFooterColumn3", null: false
+    t.boolean "AccessibleWhenStoreClosed", null: false
+    t.integer "DisplayOrder", null: false
+    t.boolean "SubjectToAcl", null: false
+  end
+
+  create_table "TopicTemplate", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.string "Name", limit: 400, null: false
+    t.string "ViewPath", limit: 400, null: false
+    t.integer "DisplayOrder", null: false
+  end
+
+  create_table "UrlRecord", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.integer "EntityId", null: false
+    t.string "EntityName", limit: 400, null: false
+    t.string "Slug", limit: 400, null: false
+    t.integer "LanguageId", null: false
+    t.boolean "IsActive", null: false
+    t.index ["EntityId", "EntityName", "LanguageId", "IsActive"], name: "IX_UrlRecord_Custom_1"
+    t.index ["Slug"], name: "IX_UrlRecord_Slug"
+  end
+
+  create_table "Vendor", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.string "Name", limit: 400, null: false
+    t.string "Email", limit: 400, null: false
+    t.text "Description"
+    t.text "AdminComment"
+    t.boolean "Active", null: false
+    t.boolean "Deleted", null: false
+    t.string "MetaKeywords", limit: 400
+    t.text "MetaDescription"
+    t.string "MetaTitle", limit: 400
+    t.integer "PageSize", null: false
+    t.boolean "AllowCustomersToSelectPageSize", null: false
+    t.string "PageSizeOptions", limit: 200
+    t.integer "DisplayOrder", null: false
+    t.integer "PictureId", null: false
+  end
+
+  create_table "VendorNote", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.integer "VendorId", null: false
+    t.text "Note", null: false
+    t.datetime "CreatedOnUtc", null: false
+  end
+
+  create_table "VietlottVN", primary_key: "VietLottID", id: :integer, force: :cascade do |t|
+    t.integer "DrawId", default: 0, null: false
+    t.datetime "DayPrize", null: false
+    t.varchar "FullBlockNumber", limit: 100, null: false
+    t.integer "NumberOne", null: false
+    t.integer "NumberTwo", null: false
+    t.integer "NumberThree", null: false
+    t.integer "NumberFour", null: false
+    t.integer "NumberFive", null: false
+    t.integer "NumberSix", null: false
+    t.datetime "ImportDate", null: false
+  end
+
+  create_table "Warehouse", primary_key: "Id", id: :integer, force: :cascade do |t|
+    t.string "Name", limit: 400, null: false
+    t.integer "AddressId", null: false
+    t.text "AdminComment"
+  end
+
+  create_table "__MigrationHistory", id: false, force: :cascade do |t|
+    t.string "MigrationId", limit: 150, null: false
+    t.string "ContextKey", limit: 300, null: false
+    t.binary "Model", null: false
+    t.string "ProductVersion", limit: 32, null: false
+  end
+
+  create_table "tung_tests", force: :cascade do |t|
+    t.string "test_column"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "versions", force: :cascade do |t|
+    t.string "item_type", null: false
+    t.integer "item_id", null: false
+    t.string "event", null: false
+    t.string "whodunnit"
+    t.text "object"
+    t.datetime "created_at"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  add_foreign_key "AclRecord", "CustomerRole", column: "CustomerRoleId", primary_key: "Id", name: "AclRecord_CustomerRole", on_delete: :cascade
+  add_foreign_key "ActivityLog", "ActivityLogType", column: "ActivityLogTypeId", primary_key: "Id", name: "ActivityLog_ActivityLogType", on_delete: :cascade
+  add_foreign_key "ActivityLog", "Customer", column: "CustomerId", primary_key: "Id", name: "ActivityLog_Customer", on_delete: :cascade
+  add_foreign_key "Address", "Country", column: "CountryId", primary_key: "Id", name: "Address_Country"
+  add_foreign_key "Address", "StateProvince", column: "StateProvinceId", primary_key: "Id", name: "Address_StateProvince"
+  add_foreign_key "AddressAttributeValue", "AddressAttribute", column: "AddressAttributeId", primary_key: "Id", name: "AddressAttributeValue_AddressAttribute", on_delete: :cascade
+  add_foreign_key "Affiliate", "Address", column: "AddressId", primary_key: "Id", name: "Affiliate_Address"
+  add_foreign_key "BackInStockSubscription", "Customer", column: "CustomerId", primary_key: "Id", name: "BackInStockSubscription_Customer", on_delete: :cascade
+  add_foreign_key "BackInStockSubscription", "Product", column: "ProductId", primary_key: "Id", name: "BackInStockSubscription_Product", on_delete: :cascade
+  add_foreign_key "BlogComment", "BlogPost", column: "BlogPostId", primary_key: "Id", name: "BlogComment_BlogPost", on_delete: :cascade
+  add_foreign_key "BlogComment", "Customer", column: "CustomerId", primary_key: "Id", name: "BlogComment_Customer", on_delete: :cascade
+  add_foreign_key "BlogPost", "Language", column: "LanguageId", primary_key: "Id", name: "BlogPost_Language", on_delete: :cascade
+  add_foreign_key "CheckoutAttributeValue", "CheckoutAttribute", column: "CheckoutAttributeId", primary_key: "Id", name: "CheckoutAttributeValue_CheckoutAttribute", on_delete: :cascade
+  add_foreign_key "Customer", "Address", column: "BillingAddress_Id", primary_key: "Id", name: "Customer_BillingAddress"
+  add_foreign_key "Customer", "Address", column: "ShippingAddress_Id", primary_key: "Id", name: "Customer_ShippingAddress"
+  add_foreign_key "CustomerAddresses", "Address", column: "Address_Id", primary_key: "Id", name: "Customer_Addresses_Target", on_delete: :cascade
+  add_foreign_key "CustomerAddresses", "Customer", column: "Customer_Id", primary_key: "Id", name: "Customer_Addresses_Source", on_delete: :cascade
+  add_foreign_key "CustomerAttributeValue", "CustomerAttribute", column: "CustomerAttributeId", primary_key: "Id", name: "CustomerAttributeValue_CustomerAttribute", on_delete: :cascade
+  add_foreign_key "Customer_CustomerRole_Mapping", "Customer", column: "Customer_Id", primary_key: "Id", name: "CustomerRole_Customers_Target", on_delete: :cascade
+  add_foreign_key "Customer_CustomerRole_Mapping", "CustomerRole", column: "CustomerRole_Id", primary_key: "Id", name: "CustomerRole_Customers_Source", on_delete: :cascade
+  add_foreign_key "DiscountRequirement", "Discount", column: "DiscountId", primary_key: "Id", name: "Discount_DiscountRequirements", on_delete: :cascade
+  add_foreign_key "DiscountUsageHistory", "Discount", column: "DiscountId", primary_key: "Id", name: "DiscountUsageHistory_Discount", on_delete: :cascade
+  add_foreign_key "DiscountUsageHistory", "Order", column: "OrderId", primary_key: "Id", name: "DiscountUsageHistory_Order", on_delete: :cascade
+  add_foreign_key "Discount_AppliedToCategories", "Category", column: "Category_Id", primary_key: "Id", name: "Discount_AppliedToCategories_Target", on_delete: :cascade
+  add_foreign_key "Discount_AppliedToCategories", "Discount", column: "Discount_Id", primary_key: "Id", name: "Discount_AppliedToCategories_Source", on_delete: :cascade
+  add_foreign_key "Discount_AppliedToManufacturers", "Discount", column: "Discount_Id", primary_key: "Id", name: "Discount_AppliedToManufacturers_Source", on_delete: :cascade
+  add_foreign_key "Discount_AppliedToManufacturers", "Manufacturer", column: "Manufacturer_Id", primary_key: "Id", name: "Discount_AppliedToManufacturers_Target", on_delete: :cascade
+  add_foreign_key "Discount_AppliedToProducts", "Discount", column: "Discount_Id", primary_key: "Id", name: "Discount_AppliedToProducts_Source", on_delete: :cascade
+  add_foreign_key "Discount_AppliedToProducts", "Product", column: "Product_Id", primary_key: "Id", name: "Discount_AppliedToProducts_Target", on_delete: :cascade
+  add_foreign_key "ExternalAuthenticationRecord", "Customer", column: "CustomerId", primary_key: "Id", name: "ExternalAuthenticationRecord_Customer", on_delete: :cascade
+  add_foreign_key "Forums_Forum", "Forums_Group", column: "ForumGroupId", primary_key: "Id", name: "Forum_ForumGroup", on_delete: :cascade
+  add_foreign_key "Forums_Post", "Customer", column: "CustomerId", primary_key: "Id", name: "ForumPost_Customer"
+  add_foreign_key "Forums_Post", "Forums_Topic", column: "TopicId", primary_key: "Id", name: "ForumPost_ForumTopic", on_delete: :cascade
+  add_foreign_key "Forums_PrivateMessage", "Customer", column: "FromCustomerId", primary_key: "Id", name: "PrivateMessage_FromCustomer"
+  add_foreign_key "Forums_PrivateMessage", "Customer", column: "ToCustomerId", primary_key: "Id", name: "PrivateMessage_ToCustomer"
+  add_foreign_key "Forums_Subscription", "Customer", column: "CustomerId", primary_key: "Id", name: "ForumSubscription_Customer"
+  add_foreign_key "Forums_Topic", "Customer", column: "CustomerId", primary_key: "Id", name: "ForumTopic_Customer"
+  add_foreign_key "Forums_Topic", "Forums_Forum", column: "ForumId", primary_key: "Id", name: "ForumTopic_Forum", on_delete: :cascade
+  add_foreign_key "GiftCard", "OrderItem", column: "PurchasedWithOrderItemId", primary_key: "Id", name: "GiftCard_PurchasedWithOrderItem"
+  add_foreign_key "GiftCardUsageHistory", "GiftCard", column: "GiftCardId", primary_key: "Id", name: "GiftCardUsageHistory_GiftCard", on_delete: :cascade
+  add_foreign_key "GiftCardUsageHistory", "Order", column: "UsedWithOrderId", primary_key: "Id", name: "GiftCardUsageHistory_UsedWithOrder", on_delete: :cascade
+  add_foreign_key "LocaleStringResource", "Language", column: "LanguageId", primary_key: "Id", name: "LocaleStringResource_Language", on_delete: :cascade
+  add_foreign_key "LocalizedProperty", "Language", column: "LanguageId", primary_key: "Id", name: "LocalizedProperty_Language", on_delete: :cascade
+  add_foreign_key "Log", "Customer", column: "CustomerId", primary_key: "Id", name: "Log_Customer", on_delete: :cascade
+  add_foreign_key "News", "Language", column: "LanguageId", primary_key: "Id", name: "NewsItem_Language", on_delete: :cascade
+  add_foreign_key "NewsComment", "Customer", column: "CustomerId", primary_key: "Id", name: "NewsComment_Customer", on_delete: :cascade
+  add_foreign_key "NewsComment", "News", column: "NewsItemId", primary_key: "Id", name: "NewsComment_NewsItem", on_delete: :cascade
+  add_foreign_key "Order", "Address", column: "BillingAddressId", primary_key: "Id", name: "Order_BillingAddress"
+  add_foreign_key "Order", "Address", column: "ShippingAddressId", primary_key: "Id", name: "Order_ShippingAddress"
+  add_foreign_key "Order", "Customer", column: "CustomerId", primary_key: "Id", name: "Order_Customer", on_delete: :cascade
+  add_foreign_key "OrderItem", "Order", column: "OrderId", primary_key: "Id", name: "OrderItem_Order", on_delete: :cascade
+  add_foreign_key "OrderItem", "Product", column: "ProductId", primary_key: "Id", name: "OrderItem_Product", on_delete: :cascade
+  add_foreign_key "OrderNote", "Order", column: "OrderId", primary_key: "Id", name: "OrderNote_Order", on_delete: :cascade
+  add_foreign_key "PermissionRecord_Role_Mapping", "CustomerRole", column: "CustomerRole_Id", primary_key: "Id", name: "PermissionRecord_CustomerRoles_Target", on_delete: :cascade
+  add_foreign_key "PermissionRecord_Role_Mapping", "PermissionRecord", column: "PermissionRecord_Id", primary_key: "Id", name: "PermissionRecord_CustomerRoles_Source", on_delete: :cascade
+  add_foreign_key "Poll", "Language", column: "LanguageId", primary_key: "Id", name: "Poll_Language", on_delete: :cascade
+  add_foreign_key "PollAnswer", "Poll", column: "PollId", primary_key: "Id", name: "PollAnswer_Poll", on_delete: :cascade
+  add_foreign_key "PollVotingRecord", "Customer", column: "CustomerId", primary_key: "Id", name: "PollVotingRecord_Customer", on_delete: :cascade
+  add_foreign_key "PollVotingRecord", "PollAnswer", column: "PollAnswerId", primary_key: "Id", name: "PollVotingRecord_PollAnswer", on_delete: :cascade
+  add_foreign_key "PredefinedProductAttributeValue", "ProductAttribute", column: "ProductAttributeId", primary_key: "Id", name: "PredefinedProductAttributeValue_ProductAttribute", on_delete: :cascade
+  add_foreign_key "ProductAttributeCombination", "Product", column: "ProductId", primary_key: "Id", name: "ProductAttributeCombination_Product", on_delete: :cascade
+  add_foreign_key "ProductAttributeValue", "Product_ProductAttribute_Mapping", column: "ProductAttributeMappingId", primary_key: "Id", name: "ProductAttributeValue_ProductAttributeMapping", on_delete: :cascade
+  add_foreign_key "ProductReview", "Customer", column: "CustomerId", primary_key: "Id", name: "ProductReview_Customer", on_delete: :cascade
+  add_foreign_key "ProductReview", "Product", column: "ProductId", primary_key: "Id", name: "ProductReview_Product", on_delete: :cascade
+  add_foreign_key "ProductReviewHelpfulness", "ProductReview", column: "ProductReviewId", primary_key: "Id", name: "ProductReviewHelpfulness_ProductReview", on_delete: :cascade
+  add_foreign_key "ProductWarehouseInventory", "Product", column: "ProductId", primary_key: "Id", name: "ProductWarehouseInventory_Product", on_delete: :cascade
+  add_foreign_key "ProductWarehouseInventory", "Warehouse", column: "WarehouseId", primary_key: "Id", name: "ProductWarehouseInventory_Warehouse", on_delete: :cascade
+  add_foreign_key "Product_Category_Mapping", "Category", column: "CategoryId", primary_key: "Id", name: "ProductCategory_Category", on_delete: :cascade
+  add_foreign_key "Product_Category_Mapping", "Product", column: "ProductId", primary_key: "Id", name: "ProductCategory_Product", on_delete: :cascade
+  add_foreign_key "Product_Manufacturer_Mapping", "Manufacturer", column: "ManufacturerId", primary_key: "Id", name: "ProductManufacturer_Manufacturer", on_delete: :cascade
+  add_foreign_key "Product_Manufacturer_Mapping", "Product", column: "ProductId", primary_key: "Id", name: "ProductManufacturer_Product", on_delete: :cascade
+  add_foreign_key "Product_Picture_Mapping", "Picture", column: "PictureId", primary_key: "Id", name: "ProductPicture_Picture", on_delete: :cascade
+  add_foreign_key "Product_Picture_Mapping", "Product", column: "ProductId", primary_key: "Id", name: "ProductPicture_Product", on_delete: :cascade
+  add_foreign_key "Product_ProductAttribute_Mapping", "Product", column: "ProductId", primary_key: "Id", name: "ProductAttributeMapping_Product", on_delete: :cascade
+  add_foreign_key "Product_ProductAttribute_Mapping", "ProductAttribute", column: "ProductAttributeId", primary_key: "Id", name: "ProductAttributeMapping_ProductAttribute", on_delete: :cascade
+  add_foreign_key "Product_ProductTag_Mapping", "Product", column: "Product_Id", primary_key: "Id", name: "ProductTag_Products_Target", on_delete: :cascade
+  add_foreign_key "Product_ProductTag_Mapping", "ProductTag", column: "ProductTag_Id", primary_key: "Id", name: "ProductTag_Products_Source", on_delete: :cascade
+  add_foreign_key "Product_SpecificationAttribute_Mapping", "Product", column: "ProductId", primary_key: "Id", name: "ProductSpecificationAttribute_Product", on_delete: :cascade
+  add_foreign_key "Product_SpecificationAttribute_Mapping", "SpecificationAttributeOption", column: "SpecificationAttributeOptionId", primary_key: "Id", name: "ProductSpecificationAttribute_SpecificationAttributeOption", on_delete: :cascade
+  add_foreign_key "QueuedEmail", "EmailAccount", column: "EmailAccountId", primary_key: "Id", name: "QueuedEmail_EmailAccount", on_delete: :cascade
+  add_foreign_key "RecurringPayment", "Order", column: "InitialOrderId", primary_key: "Id", name: "RecurringPayment_InitialOrder"
+  add_foreign_key "RecurringPaymentHistory", "RecurringPayment", column: "RecurringPaymentId", primary_key: "Id", name: "RecurringPaymentHistory_RecurringPayment", on_delete: :cascade
+  add_foreign_key "ReturnRequest", "Customer", column: "CustomerId", primary_key: "Id", name: "ReturnRequest_Customer", on_delete: :cascade
+  add_foreign_key "RewardPointsHistory", "Customer", column: "CustomerId", primary_key: "Id", name: "RewardPointsHistory_Customer", on_delete: :cascade
+  add_foreign_key "RewardPointsHistory", "Order", column: "UsedWithOrder_Id", primary_key: "Id", name: "RewardPointsHistory_UsedWithOrder"
+  add_foreign_key "Shipment", "Order", column: "OrderId", primary_key: "Id", name: "Shipment_Order", on_delete: :cascade
+  add_foreign_key "ShipmentItem", "Shipment", column: "ShipmentId", primary_key: "Id", name: "ShipmentItem_Shipment", on_delete: :cascade
+  add_foreign_key "ShippingMethodRestrictions", "Country", column: "Country_Id", primary_key: "Id", name: "ShippingMethod_RestrictedCountries_Target", on_delete: :cascade
+  add_foreign_key "ShippingMethodRestrictions", "ShippingMethod", column: "ShippingMethod_Id", primary_key: "Id", name: "ShippingMethod_RestrictedCountries_Source", on_delete: :cascade
+  add_foreign_key "ShoppingCartItem", "Customer", column: "CustomerId", primary_key: "Id", name: "ShoppingCartItem_Customer", on_delete: :cascade
+  add_foreign_key "ShoppingCartItem", "Product", column: "ProductId", primary_key: "Id", name: "ShoppingCartItem_Product", on_delete: :cascade
+  add_foreign_key "SpecificationAttributeOption", "SpecificationAttribute", column: "SpecificationAttributeId", primary_key: "Id", name: "SpecificationAttributeOption_SpecificationAttribute", on_delete: :cascade
+  add_foreign_key "StateProvince", "Country", column: "CountryId", primary_key: "Id", name: "StateProvince_Country", on_delete: :cascade
+  add_foreign_key "StoreMapping", "Store", column: "StoreId", primary_key: "Id", name: "StoreMapping_Store", on_delete: :cascade
+  add_foreign_key "TierPrice", "CustomerRole", column: "CustomerRoleId", primary_key: "Id", name: "TierPrice_CustomerRole", on_delete: :cascade
+  add_foreign_key "TierPrice", "Product", column: "ProductId", primary_key: "Id", name: "TierPrice_Product", on_delete: :cascade
+  add_foreign_key "VendorNote", "Vendor", column: "VendorId", primary_key: "Id", name: "VendorNote_Vendor", on_delete: :cascade
+end

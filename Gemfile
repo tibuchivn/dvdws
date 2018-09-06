@@ -14,6 +14,8 @@ gem 'rails', '~> 5.1.4'
 gem 'activerecord-sqlserver-adapter'
 gem 'tiny_tds'
 
+gem 'paper_trail'
+
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
