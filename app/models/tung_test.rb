@@ -1,0 +1,2 @@
+class TungTest < ApplicationRecord
+end
